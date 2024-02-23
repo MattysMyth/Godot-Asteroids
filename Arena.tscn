@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://qw4k7slf08ok"]
+[gd_scene load_steps=9 format=3 uid="uid://qw4k7slf08ok"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_5in0r"]
 [ext_resource type="Shader" path="res://Shaders/PlayerShip.gdshader" id="2_q4t0g"]
-[ext_resource type="Script" path="res://Arena.gd" id="3_ypq7g"]
+[ext_resource type="Script" path="res://Spawner.gd" id="4_o33g0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nk6ge"]
 size = Vector2(1, 1)
@@ -11,6 +11,21 @@ size = Vector2(1, 1)
 shader = ExtResource("2_q4t0g")
 
 [sub_resource type="QuadMesh" id="QuadMesh_khflv"]
+
+[sub_resource type="GDScript" id="GDScript_ojv3d"]
+script/source = "extends Area2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fvjyo"]
 
@@ -38,7 +53,16 @@ mesh = SubResource("QuadMesh_khflv")
 unique_name_in_owner = true
 scale = Vector2(90, 60)
 collision_mask = 14
-script = ExtResource("3_ypq7g")
+script = SubResource("GDScript_ojv3d")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena"]
+[node name="ArenaBounds" type="CollisionShape2D" parent="Arena"]
 shape = SubResource("RectangleShape2D_fvjyo")
+
+[node name="Spawner" type="Node2D" parent="."]
+script = ExtResource("4_o33g0")
+
+[node name="Timer" type="Timer" parent="Spawner"]
+process_callback = 0
+autostart = true
+
+[connection signal="timeout" from="Spawner/Timer" to="Spawner" method="_on_timer_timeout"]
